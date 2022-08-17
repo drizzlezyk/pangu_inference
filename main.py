@@ -12,12 +12,14 @@ parser.add_argument("--model_path", type=str, default='./model',
                     help="the path of model path")
 parser.add_argument("--input_str", type=str, default='四川的省会是哪里？',
                     help="question")
+parser.add_argument("--output_file", type=str, default='../output.txt',
+                    help="output file")
 
 args = parser.parse_args()
 model_path = args.model_path
 set_context(backend='pytorch')
 config = alpha.model_config_gpu(model='350M', load=model_path)
-alpha.inference(config, input=args.input_str)
+alpha.inference(config, input=args.input_str, output_file=args.output_file)
 
 # from pcl_pangu.context import set_context
 # from pcl_pangu.dataset import txt2mindrecord
