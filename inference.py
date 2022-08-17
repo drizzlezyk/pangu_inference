@@ -12,11 +12,13 @@ parser.add_argument("--model_path", type=str, default='./model',
                     help="the path of model path")
 parser.add_argument("--input_str", type=str, default='四川的省会是哪里？',
                     help="question")
+parser.add_argument("--model", type=str, default='2B6',
+                    help="model")
 
 args = parser.parse_args()
 model_path = args.model_path
 set_context(backend='mindspore')
-config = alpha.model_config_npu(model='350M', load=model_path)
+config = alpha.model_config_npu(model=args.model, load=model_path)
 alpha.inference(config, input=args.input_str)
 
 # from pcl_pangu.context import set_context
