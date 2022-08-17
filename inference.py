@@ -32,3 +32,14 @@ alpha.inference(config, input=args.input_str)
 #                                 load='path/to/save/ckpt',
 #                                 data_path=data_path)
 # alpha.train(config)
+
+
+class InferService():
+    def __init__(self, model_name, model_path):
+        self.model_name = model_name
+        self.model_path = model_path
+
+    def load_inference(self, input_text):
+        set_context(backend='mindspore')
+        config = alpha.model_config_npu(model=self.model, load=self.model_path)
+        alpha.inference(config, input=input_text, output_file='./output.txt')

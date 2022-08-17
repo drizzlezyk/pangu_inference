@@ -16,7 +16,7 @@ parser.add_argument("--input_str", type=str, default='四川的省会是哪里�
 args = parser.parse_args()
 model_path = args.model_path
 set_context(backend='pytorch')
-config = alpha.model_config_gpu(model='350M', load='350M/mode/path')
+config = alpha.model_config_gpu(model='350M', load=model_path)
 alpha.inference(config, input=args.input_str)
 
 # from pcl_pangu.context import set_context
