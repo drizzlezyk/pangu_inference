@@ -43,3 +43,6 @@ class InferService():
         set_context(backend='mindspore')
         config = alpha.model_config_npu(model=self.model, load=self.model_path)
         alpha.inference(config, input=input_text, output_file='./output.txt')
+        f = open('./output.txt', 'r', encoding='utf-8')
+        output = f.readlines()
+        return output
