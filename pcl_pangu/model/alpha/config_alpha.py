@@ -155,13 +155,18 @@ class model_config_npu():
                  start_lr=1.0e-5,
                  end_lr=1.0e-6,
                  data_path='data',
-                 vocab_file=vocab_4w,
+                 tokenizer_path='',
                  vocab_size=40000,
-                 load=None,
+                 load_ckpt_local_path=None,
                  save=None,
                  strategy_load_ckpt_path=None,
                  finetune=False,
-                 mindir_path='./'
+                 mindir_path='',
+                 device_target='Ascend',
+                 input='',
+                 output_file='',
+                 oneCardInference=True,
+                 distribute=True
                  ):
         self.model = model
         self.model_parallel_size = model_parallel_size
@@ -170,20 +175,25 @@ class model_config_npu():
         self.lr_decay_iters = int(0.64 * self.train_iters)
         self.start_lr = start_lr
         self.end_lr = end_lr
-        self.load = load
+        self.load_ckpt_local_path = load_ckpt_local_path
         self.finetune = finetune
-        if load is not None:
-            self.save = self.load if save is None else save
+        if load_ckpt_local_path is not None:
+            self.save = self.load_ckpt_local_path if save is None else save
         else:
             self.save = save
         self.data_path = data_path
-        self.vocab_file = vocab_file
+        self.tokenizer_path = tokenizer_path
         self.vocab_size = vocab_size
         self.strategy_load_ckpt_path = strategy_load_ckpt_path
-        if self.finetune:
-            assert self.load is not None, "> Please set your pretrained [model.ckpt] path!"
-            # assert self.strategy_load_ckpt_path is not None, "> Please set your pretrained model [strategy.ckpt] path!"
         self.mindir_path = mindir_path
+        self.device_target = device_target
+        self.input = input
+        self.output_file = output_file
+        self.oneCardInference = oneCardInference
+        self.distribute = distribute
+        if self.finetune:
+            assert self.load_ckpt_local_path is not None, "> Please set your pretrained [model.ckpt] path!"
+            # assert self.strategy_load_ckpt_path is not None, "> Please set your pretrained model [strategy.ckpt] path!"
 
 
     def _cover_modelarts_training_args(self, oneCardInference=False):
@@ -198,13 +208,15 @@ class model_config_npu():
                 self.model_parallel_size = tmp_config['model_parallel_size']
         default_config = copy.deepcopy({**tmp_config, **DEFAULT_CONFIG})
         _vars = vars(self)
-        default_config['load'] = self.load
+        default_config['load_ckpt_local_path'] = self.load_ckpt_local_path
         default_config['save'] = self.save
         default_config['finetune'] = self.finetune
         default_config['data_path'] = self.data_path
-        default_config['vocab_file'] = self.vocab_file
+        default_config['tokenizer_path'] = self.tokenizer_path
         default_config['vocab_size'] = self.vocab_size
         default_config['lr_decay_iters'] = self.lr_decay_iters
+        default_config['mindir_path'] = self.mindir_path
+        default_config['device_target'] = self.device_target
         # _vars.pop('checkpoint_path')
         for k, v in _vars.items():
             default_config[k] = v

@@ -1,7 +1,8 @@
-import os
-os.system('pip install loguru')
 from pcl_pangu.context import set_context
 from pcl_pangu.model import alpha
+import argparse
+import os
+
 
 # parser = argparse.ArgumentParser()
 # parser.add_argument("--model_path", type=str, default='obs://pangu/models/26b/checkpiont_file/',
